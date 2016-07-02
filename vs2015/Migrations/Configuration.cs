@@ -11,7 +11,7 @@ namespace vs2015.Migrations
         {
             //AutomaticMigrationsEnabled = false;
             AutomaticMigrationsEnabled = true; //Migration automática
-            AutomaticMigrationDataLossAllowed = false; //Evita a perda de dados durante uma Migration
+            AutomaticMigrationDataLossAllowed = true; //Evita a perda de dados durante uma Migration
         }
 
         protected override void Seed(vs2015.Models.vs2015Context context)

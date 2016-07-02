@@ -4,13 +4,12 @@
     ViewBag.Title = "Edição";
 }
 
-<h2>Edição</h2>
-
+<h2>Editar</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Usuário</h4>
         <hr />
@@ -50,6 +49,82 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.estado, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.estado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.endereco, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.endereco, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.endereco, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.complemento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.complemento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.complemento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.numero, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.numero, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.numero, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.bairro, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.bairro, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.bairro, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.telefone, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.telefone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.telefone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="telefone">foto</label>
+            <div class="col-md-10">
+                <img src="@Html.DisplayFor(model => model.foto)" alt="" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="telefone">foto</label>
+            @Html.Hidden("UploadedImagePath", string.Empty, new { id = "hf-uploaded-image-path" })
+            @Html.HiddenFor(model => model.foto, new { id = "hf-cropped-image-path" })
+
+            <div class="col-md-10">
+                <p>@Html.TextBoxFor(model => model.MyFile, new { id = "fu-my-simple-upload", type = "file" })</p>
+                <p><a href="#" id="hl-start-upload">Upload</a></p>
+
+                <div id="crop-image-area" style="display:none;">
+                    <div class="col-md-6">
+                        <p><img id="uploaded-image" src="#" /></p>
+                        <p><a href="#" id="hl-crop-image">Cortar imagem</a></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><img id="my-cropped-image" src="#" style="display:none;" /></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Salvar" class="btn btn-default" />
             </div>
@@ -61,6 +136,126 @@
     @Html.ActionLink("Voltar", "Index")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@section scripts{
+
+    <script type="text/javascript">
+
+        //************************************** JavaScript for ajax file upload **************************************
+        var jqXHRData;
+
+        $(document).ready(function () {
+
+            'use strict';
+
+            $('#fu-my-simple-upload').fileupload({
+                url: '/File/UploadFile',
+                dataType: 'json',
+                add: function (e, data) {
+                    jqXHRData = data;
+                },
+                done: function (event, data) {
+                    if (data.result.isUploaded) {
+
+                        $("#hf-uploaded-image-path").val(data.result.filePath);
+
+                        destroyCrop();
+
+                        $("#uploaded-image").attr("src", data.result.filePath + "?t=" + new Date().getTime());
+
+                        initCrop();
+
+                        $("#crop-image-area").fadeIn("slow");
+                    } else {
+
+                    }
+                },
+                fail: function (event, data) {
+                    if (data.files[0].error) {
+                        alert(data.files[0].error);
+                    }
+                }
+            });
+        });
+
+        $("#hl-start-upload").on('click', function () {
+            if (jqXHRData) {
+                jqXHRData.submit();
+            }
+            return false;
+        });
+        //************************************** JavaScript for ajax file upload END **************************************
+
+
+
+
+        //************************************** JavaScript for cropping of image *****************************************
+        var imageCropWidth = 0;
+        var imageCropHeight = 0;
+        var cropPointX = 0;
+        var cropPointY = 0;
+
+        $("#hl-crop-image").on("click", function (e) {
+            e.preventDefault();
+            cropImage();
+        });
+
+        function initCrop() {
+            $('#uploaded-image').Jcrop({
+                onChange: setCoordsAndImgSize,
+                aspectRatio: 1
+            });
+        }
+
+        function destroyCrop() {
+            var jcropApi = $('#uploaded-image').data('Jcrop');
+
+            if (jcropApi !== undefined) {
+                jcropApi.destroy();
+                $('#uploaded-image').attr('style', "").attr("src", "");
+            }
+        }
+
+        function setCoordsAndImgSize(e) {
+
+            imageCropWidth = e.w;
+            imageCropHeight = e.h;
+
+            cropPointX = e.x;
+            cropPointY = e.y;
+        }
+
+        function cropImage() {
+
+            if (imageCropWidth == 0 && imageCropHeight == 0) {
+                alert("Please select crop area.");
+                return;
+            }
+
+            $.ajax({
+                url: '/Image/CropImage',
+                type: 'POST',
+                data: {
+                    imagePath: $("#hf-uploaded-image-path").val(),
+                    cropPointX: cropPointX,
+                    cropPointY: cropPointY,
+                    imageCropWidth: imageCropWidth,
+                    imageCropHeight: imageCropHeight
+                },
+                success: function (data) {
+
+                    $("#hf-cropped-image-path").val(data.photoPath);
+
+                    $("#my-cropped-image")
+                        .attr("src", data.photoPath + "?t=" + new Date().getTime())
+                        .show();
+
+                    //$("#btn-my-submit").fadeIn("slow");
+                },
+                error: function (data) { }
+            });
+        }
+
+        //************************************** JavaScript for cropping of image END **************************************
+
+    </script>
 }

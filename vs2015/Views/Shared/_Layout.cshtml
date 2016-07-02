@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - CRUD</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/jquery.Jcrop.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -33,7 +34,9 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryteste")
+    <script src="~/scripts/jquery.Jcrop.min.js"></script>
+    @Scripts.Render("~/bundles/fileupload")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
