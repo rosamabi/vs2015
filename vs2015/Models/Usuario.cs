@@ -19,11 +19,11 @@ namespace vs2015.Models
         [StringLength(1000)]
         [Display(Name = "Senha")]
         public string senha { get; set; }
+
+        [ForeignKey("Cidade")]
         [Display(Name = "Cidade")]
         public int cidade { get; set; }
-        [StringLength(2)]
-        [Display(Name = "Estado")]
-        public string estado { get; set; }
+
         [StringLength(70)]
         [Display(Name = "Endereço")]
         public string endereco { get; set; }
@@ -44,5 +44,7 @@ namespace vs2015.Models
 
         [NotMapped]
         public HttpPostedFileBase MyFile { get; set; }
+
+        public virtual Cidade Cidade { get; set; }
     }
 }

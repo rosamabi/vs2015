@@ -216,6 +216,8 @@
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Cidade.cs" />
+    <Compile Include="Models\Estado.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\vs2015Context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
