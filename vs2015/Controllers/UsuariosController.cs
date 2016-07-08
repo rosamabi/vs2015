@@ -11,6 +11,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using vs2015.Models;
+using vs2015.ViewModels;
 
 namespace vs2015.Controllers
 {
@@ -18,13 +19,61 @@ namespace vs2015.Controllers
     {
         private vs2015Context db = new vs2015Context();
 
+        public List<UsuarioViewModel> getUsuariosView()
+        {
+            List<Usuario> usuariosDominio = db.Usuarios.ToList();
+            List<UsuarioViewModel> usuariosView = new List<UsuarioViewModel>();
+
+            foreach (Usuario us in usuariosDominio)
+            {
+                UsuarioViewModel usView = new UsuarioViewModel();
+                usView.bairro = us.bairro;
+                usView.Cidade = us.Cidade;
+                usView.cidadeid = us.cidadeid;
+                usView.complemento = us.complemento;
+                usView.email = us.email;
+                usView.endereco = us.endereco;
+                usView.foto = us.foto;
+                usView.id = us.id;
+                usView.nome = us.nome;
+                usView.numero = us.numero;
+                usView.senha = Decrypt(us.senha, "123");
+                usView.telefone = us.telefone;
+                usuariosView.Add(usView);
+            }
+
+            return usuariosView;
+        }
+
+        public UsuarioViewModel getUsuarioView(int? id)
+        {
+            Usuario us = db.Usuarios.Find(id);
+            UsuarioViewModel usView = new UsuarioViewModel();
+
+            if (us != null)
+            {
+                usView.bairro = us.bairro;
+                usView.Cidade = us.Cidade;
+                usView.cidadeid = us.cidadeid;
+                usView.complemento = us.complemento;
+                usView.email = us.email;
+                usView.endereco = us.endereco;
+                usView.foto = us.foto;
+                usView.id = us.id;
+                usView.nome = us.nome;
+                usView.numero = us.numero;
+                usView.senha = Decrypt(us.senha, "123");
+                usView.telefone = us.telefone;
+            }
+
+            return usView;
+        }
         // GET: Usuarios
         public ActionResult Index()
         {
-            List<Usuario> usuarios = db.Usuarios.ToList();
-            foreach (Usuario us in usuarios)
-                us.senha = Decrypt(us.senha, "123");
-            return View(usuarios);
+            List<UsuarioViewModel> usuariosView = new List<UsuarioViewModel>();
+            usuariosView = getUsuariosView(); //precisa ser feito porque to usando uma viewmodel em vez do model do domínio
+            return View(usuariosView);
         }
 
         // GET: Usuarios/Details/5
@@ -34,14 +83,10 @@ namespace vs2015.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Usuario usuario = db.Usuarios.Find(id);
+            UsuarioViewModel usuario = getUsuarioView(id);
             if (usuario == null)
             {
                 return HttpNotFound();
-            }
-            else
-            {
-                usuario.senha = Decrypt(usuario.senha, "123");
             }
             return View(usuario);
         }
@@ -49,7 +94,9 @@ namespace vs2015.Controllers
         // GET: Usuarios/Create
         public ActionResult Create()
         {
-            return View();
+            UsuarioViewModel modelusuario = new UsuarioViewModel { estados = getEstados(), cidades = new List<SelectListItem>() };
+            return View(modelusuario);
+            //return View();
         }
 
         // POST: Usuarios/Create
@@ -57,18 +104,13 @@ namespace vs2015.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,nome,email,senha,cidade,estado,endereco,complemento,numero,bairro,telefone,foto")] Usuario usuario)
+        public ActionResult Create([Bind(Include = "id,nome,email,senha,cidadeid,endereco,complemento,numero,bairro,telefone,foto")] Usuario usuario)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     usuario.senha = Encrypt(usuario.senha, "123");
-
-                    //arquivo
-                    string imagePath = Server.MapPath("~/" + usuario.foto);
-                    byte[] imageBytes = System.IO.File.ReadAllBytes(imagePath);
-
                     db.Usuarios.Add(usuario);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -101,14 +143,15 @@ namespace vs2015.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Usuario usuario = db.Usuarios.Find(id);
+            UsuarioViewModel usuario = getUsuarioView(id);
             if (usuario == null)
             {
                 return HttpNotFound();
             }
             else
             {
-                usuario.senha = Decrypt(usuario.senha, "123");
+                usuario.estados = getEstados();
+                usuario.cidades = new List<SelectListItem>();
             }
             return View(usuario);
         }
@@ -118,16 +161,35 @@ namespace vs2015.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,nome,email,senha,cidade,estado,endereco,complemento,numero,bairro,telefone,foto")] Usuario usuario)
+        public ActionResult Edit([Bind(Include = "id,nome,email,senha,cidadeid,endereco,complemento,numero,bairro,telefone,foto")] Usuario usuario)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(usuario).State = EntityState.Modified;
-                usuario.senha = Encrypt(usuario.senha, "123");
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(usuario).State = EntityState.Modified;
+                    usuario.senha = Encrypt(usuario.senha, "123");
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(usuario);
             }
-            return View(usuario);
+            catch (DbEntityValidationException ex)
+            {
+                // Retrieve the error messages as a list of strings.
+                var errorMessages = ex.EntityValidationErrors
+                        .SelectMany(x => x.ValidationErrors)
+                        .Select(x => x.ErrorMessage);
+
+                // Join the list to a single string.
+                var fullErrorMessage = string.Join("; ", errorMessages);
+
+                // Combine the original exception message with the new one.
+                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+
+                // Throw a new DbEntityValidationException with the improved exception message.
+                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+            }
         }
 
         // GET: Usuarios/Delete/5
@@ -137,14 +199,10 @@ namespace vs2015.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Usuario usuario = db.Usuarios.Find(id);
+            UsuarioViewModel usuario = getUsuarioView(id);
             if (usuario == null)
             {
                 return HttpNotFound();
-            }
-            else
-            {
-                usuario.senha = Decrypt(usuario.senha, "123");
             }
             return View(usuario);
         }
@@ -167,6 +225,30 @@ namespace vs2015.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public JsonResult getCidades(string uf)
+        {
+            List<Cidade> cidades = db.Cidades.Where(x => x.uf.Equals(uf)).ToList();
+            List<SelectListItem> dropdownItems = cidades.Select(item => new SelectListItem
+            {
+                Value = item.id.ToString(),
+                Text = item.nome
+            }).ToList();
+
+            return Json(new SelectList(dropdownItems, "Value", "Text"));
+        }
+
+        private IEnumerable<SelectListItem> getEstados()
+        {
+            List<Estado> estados = db.Estados.ToList();
+            List<SelectListItem> dropdownItems = estados.Select(item => new SelectListItem
+            {
+                Value = item.uf,
+                Text = item.nome
+            }).ToList();
+
+            return new SelectList(dropdownItems, "Value", "Text");
         }
 
         #region encriptacao

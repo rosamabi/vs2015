@@ -12,7 +12,6 @@ namespace vs2015.Models
         public int id { get; set; }
 
         [StringLength(150)]
-        [Display(Name = "Cidade")]
         public string nome { get; set; }
 
         [ForeignKey("Estado")]

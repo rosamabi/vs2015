@@ -1,4 +1,4 @@
-﻿@model IEnumerable<vs2015.Models.Usuario>
+﻿@model IEnumerable<vs2015.ViewModels.UsuarioViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Adcionar", "Create")
+    @Html.ActionLink("Adicionar", "Create")
 </p>
 <table class="table">
     <tr>
@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.senha)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Cidade.nome)
+            @Html.DisplayNameFor(model => model.cidadeid)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Cidade.uf)

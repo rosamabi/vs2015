@@ -1,4 +1,4 @@
-﻿@model vs2015.Models.Usuario
+﻿@model vs2015.ViewModels.UsuarioViewModel
 
 @{
     ViewBag.Title = "Exclusão";
@@ -36,15 +36,15 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.cidade)
+            @Html.DisplayNameFor(model => model.cidadeid)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.cidade)
+            @Html.DisplayFor(model => model.Cidade.nome)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Cidade.nome)
+            @Html.DisplayNameFor(model => model.Cidade.uf)
         </dt>
 
         <dd>

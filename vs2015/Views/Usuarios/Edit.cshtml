@@ -1,4 +1,4 @@
-﻿@model vs2015.Models.Usuario
+﻿@model vs2015.ViewModels.UsuarioViewModel
 
 @{
     ViewBag.Title = "Edição";
@@ -41,18 +41,17 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.cidade, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Cidade.uf, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.cidade, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.cidade, "", new { @class = "text-danger" })
+                @Html.DropDownList("estados", Model.estados, htmlAttributes: new { @class = "form-control" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.estado, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.cidadeid, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.estado, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.cidadeid, Model.cidades, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.cidadeid, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -137,6 +136,8 @@
 </div>
 
 @section scripts{
+
+    @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
 
@@ -257,5 +258,27 @@
 
         //************************************** JavaScript for cropping of image END **************************************
 
+        //dropdowlist
+        $(document).ready(function () {
+
+            $("#estados").change(function () {
+                $("#cidadeid").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("getCidades")',
+                    dataType: 'json',
+                    data: { uf: $("#estados").val() },
+                    success: function (cidades) {
+                        $.each(cidades, function (i, city) {
+                            $("#cidadeid").append('<option value="' + city.Value + '">' + city.Text + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Erro ao obter cidades - ' + ex.Message);
+                    }
+                });
+                return false;
+            })
+        });
     </script>
 }

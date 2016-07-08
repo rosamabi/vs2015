@@ -8,10 +8,10 @@ namespace vs2015
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+            bundles.Add(new ScriptBundle("~/bundles/jqueryold").Include(
                         "~/Scripts/jquery-{version}.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryteste").Include(
+            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-1.9.1.min.js",
                         "~/Scripts/jquery-ui-1.9.2.min.js"));
 

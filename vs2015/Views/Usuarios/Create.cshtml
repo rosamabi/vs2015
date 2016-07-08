@@ -1,4 +1,4 @@
-﻿@model vs2015.Models.Usuario
+﻿@model vs2015.ViewModels.UsuarioViewModel
 
 @{
     ViewBag.Title = "Inclusão";
@@ -17,7 +17,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.nome, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "form-control", @maxlength = "80" } })
                 @Html.ValidationMessageFor(model => model.nome, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -25,7 +25,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
                 @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -33,31 +33,30 @@
         <div class="form-group">
             @Html.LabelFor(model => model.senha, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.senha, new { htmlAttributes = new { @type = "password", @class = "form-control" } })
+                @Html.EditorFor(model => model.senha, new { htmlAttributes = new { @type = "password", @class = "form-control", @maxlength = "20" } })
                 @Html.ValidationMessageFor(model => model.senha, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Cidade.nome, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Cidade.nome, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.cidade, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Cidade.uf, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Cidade.uf, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Cidade.uf, "", new { @class = "text-danger" })
+                @Html.DropDownList("estados", Model.estados, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.cidadeid, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.cidadeid, Model.cidades, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.cidadeid, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.endereco, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.endereco, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.endereco, new { htmlAttributes = new { @class = "form-control", @maxlength = "70" } })
                 @Html.ValidationMessageFor(model => model.endereco, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -65,7 +64,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.complemento, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.complemento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.complemento, new { htmlAttributes = new { @class = "form-control", @maxlength = "30" } })
                 @Html.ValidationMessageFor(model => model.complemento, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -73,7 +72,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.numero, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.numero, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.numero, new { htmlAttributes = new { @class = "form-control", @maxlength = "5" } })
                 @Html.ValidationMessageFor(model => model.numero, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -81,7 +80,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.bairro, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.bairro, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.bairro, new { htmlAttributes = new { @class = "form-control", @maxlength = "30" } })
                 @Html.ValidationMessageFor(model => model.bairro, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -89,13 +88,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.telefone, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.telefone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.telefone, new { htmlAttributes = new { @class = "form-control", @maxlength = "20" } })
                 @Html.ValidationMessageFor(model => model.telefone, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-2" for="telefone">foto</label>
+            @Html.LabelFor(model => model.foto, htmlAttributes: new { @class = "control-label col-md-2" })
             @Html.Hidden("UploadedImagePath", string.Empty, new { id = "hf-uploaded-image-path" })
             @Html.HiddenFor(model => model.foto, new { id = "hf-cropped-image-path" })
 
@@ -130,6 +129,8 @@
 
 @section scripts{
 
+    @Scripts.Render("~/bundles/jqueryval")
+
     <script type="text/javascript">
 
         //************************************** JavaScript for ajax file upload **************************************
@@ -147,7 +148,7 @@
                 },
                 done: function (event, data) {
                     if (data.result.isUploaded) {
-                        
+
                         $("#hf-uploaded-image-path").val(data.result.filePath);
 
                         destroyCrop();
@@ -240,8 +241,6 @@
                     $("#my-cropped-image")
                         .attr("src", data.photoPath + "?t=" + new Date().getTime())
                         .show();
-
-                    //$("#btn-my-submit").fadeIn("slow");
                 },
                 error: function (data) { }
             });
@@ -249,5 +248,27 @@
 
         //************************************** JavaScript for cropping of image END **************************************
 
+        //dropdowlist
+        $(document).ready(function () {
+
+            $("#estados").change(function () {
+                $("#cidadeid").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("getCidades")',
+                    dataType: 'json',
+                    data: { uf: $("#estados").val() },
+                    success: function (cidades) {
+                        $.each(cidades, function (i, city) {
+                            $("#cidadeid").append('<option value="' + city.Value + '">' + city.Text + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Erro ao obter cidades - ' + ex.Message);
+                    }
+                });
+                return false;
+            })
+        });
     </script>
 }
