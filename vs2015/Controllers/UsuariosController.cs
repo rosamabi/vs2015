@@ -150,8 +150,8 @@ namespace vs2015.Controllers
             }
             else
             {
-                usuario.estados = getEstados();
-                usuario.cidades = new List<SelectListItem>();
+                usuario.estados = getEstados(usuario.Cidade.uf);
+                usuario.cidades = getCidadesInterno(usuario.Cidade.uf, usuario.cidadeid);
             }
             return View(usuario);
         }
@@ -239,7 +239,22 @@ namespace vs2015.Controllers
             return Json(new SelectList(dropdownItems, "Value", "Text"));
         }
 
-        private IEnumerable<SelectListItem> getEstados()
+        public IEnumerable<SelectListItem> getCidadesInterno(string uf, int? cidadeselecionada)
+        {
+            List<Cidade> cidades = db.Cidades.Where(x => x.uf.Equals(uf)).ToList();
+            List<SelectListItem> dropdownItems = cidades.Select(item => new SelectListItem
+            {
+                Value = item.id.ToString(),
+                Text = item.nome
+            }).ToList();
+
+            if (cidadeselecionada == null)
+                return new SelectList(dropdownItems, "Value", "Text");
+            else
+                return new SelectList(dropdownItems, "Value", "Text", cidadeselecionada);
+        }
+
+        private IEnumerable<SelectListItem> getEstados(string ufselecionada = "")
         {
             List<Estado> estados = db.Estados.ToList();
             List<SelectListItem> dropdownItems = estados.Select(item => new SelectListItem
@@ -248,7 +263,10 @@ namespace vs2015.Controllers
                 Text = item.nome
             }).ToList();
 
-            return new SelectList(dropdownItems, "Value", "Text");
+            if (ufselecionada.Equals(""))
+                return new SelectList(dropdownItems, "Value", "Text");
+            else
+                return new SelectList(dropdownItems, "Value", "Text", ufselecionada);
         }
 
         #region encriptacao

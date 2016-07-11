@@ -143,6 +143,7 @@
             $('#fu-my-simple-upload').fileupload({
                 url: '/File/UploadFile',
                 dataType: 'json',
+                replaceFileInput: false,
                 add: function (e, data) {
                     jqXHRData = data;
                 },

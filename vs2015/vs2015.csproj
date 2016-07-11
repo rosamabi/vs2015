@@ -155,6 +155,8 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="scripts\jquery-1.9.1.min.js" />
+    <Content Include="scripts\jquery-ui-1.9.2.min.js" />
     <Content Include="scripts\jquery.fileupload.js" />
     <Content Include="scripts\jquery.Jcrop.min.js" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -218,6 +220,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Cidade.cs" />
     <Compile Include="Models\Estado.cs" />
+    <Compile Include="Models\Evento.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\vs2015Context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

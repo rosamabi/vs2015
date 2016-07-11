@@ -22,5 +22,6 @@ namespace vs2015.Models
         public System.Data.Entity.DbSet<vs2015.Models.Usuario> Usuarios { get; set; }
         public System.Data.Entity.DbSet<vs2015.Models.Estado> Estados { get; set; }
         public System.Data.Entity.DbSet<vs2015.Models.Cidade> Cidades { get; set; }
+        public System.Data.Entity.DbSet<vs2015.Models.Evento> Eventos { get; set; }
     }
 }
