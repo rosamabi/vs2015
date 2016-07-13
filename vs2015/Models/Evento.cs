@@ -11,7 +11,8 @@ namespace vs2015.Models
     public class Evento
     {
         public int id { get; set; }
-        public DateTime horario { get; set; }
+        public DateTime horarioInicio { get; set; }
+        public DateTime horarioFim { get; set; }
         [StringLength(150)]
         public string descricao { get; set; }
     }

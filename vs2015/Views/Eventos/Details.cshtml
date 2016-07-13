@@ -1,0 +1,42 @@
+﻿@model vs2015.Models.Evento
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Evento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.horarioInicio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.horarioInicio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.horarioFim)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.horarioFim)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.descricao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.descricao)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
