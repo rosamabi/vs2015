@@ -2,6 +2,7 @@
 using DayPilot.Web.Mvc.Enums;
 using DayPilot.Web.Mvc.Events.Calendar;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -20,67 +21,103 @@ namespace vs2015.Controllers
         // GET: Eventos
         public ActionResult Index()
         {
-            //return View(db.Eventos.ToList());
-            return View();
+            return View(db.Eventos.ToList());
+            //return View();
         }
 
-        public ActionResult Backend()
+        //public ActionResult Backend()
+        //{
+        //    return new Dpc().CallBack(this);
+        //}
+
+        //class Dpc : DayPilotCalendar
+        //{
+        //    vs2015Context db = new vs2015Context();
+
+        //    protected override void OnInit(InitArgs e)
+        //    {
+        //        Update(CallBackUpdateType.Full);
+        //    }
+
+        //    protected override void OnEventResize(EventResizeArgs e)
+        //    {
+        //        var toBeResized = (from ev in db.Eventos where ev.id == Convert.ToInt32(e.Id) select ev).First();
+        //        toBeResized.horarioInicio = e.NewStart;
+        //        toBeResized.horarioFim = e.NewEnd;
+        //        db.SaveChanges();
+        //        Update();
+        //    }
+
+        //    protected override void OnEventMove(EventMoveArgs e)
+        //    {
+        //        var toBeResized = (from ev in db.Eventos where ev.id == Convert.ToInt32(e.Id) select ev).First();
+        //        toBeResized.horarioInicio = e.NewStart;
+        //        toBeResized.horarioFim = e.NewEnd;
+        //        db.SaveChanges();
+        //        Update();
+        //    }
+
+        //    protected override void OnTimeRangeSelected(TimeRangeSelectedArgs e)
+        //    {
+        //        var toBeCreated = new Evento { horarioInicio = e.Start, horarioFim = e.End, descricao = (string)e.Data["name"] };
+        //        db.Eventos.Add(toBeCreated);
+        //        db.SaveChanges();
+        //        Update();
+        //    }
+
+        //    protected override void OnFinish()
+        //    {
+        //        if (UpdateType == CallBackUpdateType.None)
+        //        {
+        //            return;
+        //        }
+
+        //        Events = from ev in db.Eventos select ev;
+
+        //        DataIdField = "id";
+        //        DataTextField = "descricao";
+        //        DataStartField = "horarioInicio";
+        //        DataEndField = "horarioFim";
+        //    }
+
+        //}
+
+        public ActionResult GetEvents(double start, double end)
         {
-            return new Dpc().CallBack(this);
+            var fromDate = ConvertFromUnixTimestamp(start);
+            var toDate = ConvertFromUnixTimestamp(end);
+
+            //Get the events
+            //You may get from the repository also
+            var eventList = GetEvents();
+
+            var rows = eventList.ToArray();
+            return Json(rows, JsonRequestBehavior.AllowGet);
         }
 
-        class Dpc : DayPilotCalendar
+        private List<Evento> GetEvents()
         {
-            vs2015Context db = new vs2015Context();
+            List<Evento> eventList = new List<Evento>();
 
-            protected override void OnInit(InitArgs e)
-            {
-                Update(CallBackUpdateType.Full);
-            }
+            //Evento newEvent = new Evento()
+            //{
+            //    id = ",
+            //    title = "Event 1",
+            //    start = DateTime.Now.AddDays(1).ToString("s"),
+            //    end = DateTime.Now.AddDays(1).ToString("s"),
+            //    allDay = false
+            //};
 
-            protected override void OnEventResize(EventResizeArgs e)
-            {
-                var toBeResized = (from ev in db.Eventos where ev.id == Convert.ToInt32(e.Id) select ev).First();
-                toBeResized.horarioInicio = e.NewStart;
-                toBeResized.horarioFim = e.NewEnd;
-                db.SaveChanges();
-                Update();
-            }
-
-            protected override void OnEventMove(EventMoveArgs e)
-            {
-                var toBeResized = (from ev in db.Eventos where ev.id == Convert.ToInt32(e.Id) select ev).First();
-                toBeResized.horarioInicio = e.NewStart;
-                toBeResized.horarioFim = e.NewEnd;
-                db.SaveChanges();
-                Update();
-            }
-
-            protected override void OnTimeRangeSelected(TimeRangeSelectedArgs e)
-            {
-                var toBeCreated = new Evento { horarioInicio = e.Start, horarioFim = e.End, descricao = (string)e.Data["name"] };
-                db.Eventos.Add(toBeCreated);
-                db.SaveChanges();
-                Update();
-            }
-
-            protected override void OnFinish()
-            {
-                if (UpdateType == CallBackUpdateType.None)
-                {
-                    return;
-                }
-
-                Events = from ev in db.Eventos select ev;
-
-                DataIdField = "id";
-                DataTextField = "descricao";
-                DataStartField = "horarioInicio";
-                DataEndField = "horarioFim";
-            }
-
+            //eventList.Add(newEvent);
+            eventList = db.Eventos.ToList();
+            return eventList;
         }
 
+        private static DateTime ConvertFromUnixTimestamp(double timestamp)
+        {
+            var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return origin.AddSeconds(timestamp);
+        }
         // GET: Eventos/Details/5
         public ActionResult Details(int? id)
         {
