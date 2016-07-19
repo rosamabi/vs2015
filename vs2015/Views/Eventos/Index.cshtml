@@ -10,33 +10,175 @@
 
 @section styles{
     <link href="~/Content/fullcalendar.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+
+    <style>
+        #external-events {
+            float: left;
+            width: 150px;
+            padding: 10px 10px 0;
+            border: 1px solid #ccc;
+            background: #eee;
+            text-align: left;
+        }
+    </style>
 }
 
 <h2>Index</h2>
 
+<div id="external-events">
+    <input type="text" id="txt-adicionar-evento" class="form-control" placeholder="Título" style="width: 125px;" />
+    <button id="btn-adicionar-evento" class="btn btn-info" style="width: 125px;">Adicionar&nbsp;<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button>
+    <h6><span class="glyphicon glyphicon-move"></span>&nbsp;Arraste os eventos para cadastrar</h6>
+    <div class="lista-de-eventos"></div>
+</div>
+
 <div id="calendar"></div>
+
+<div class="modal fade modal-editar-evento">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Editar evento</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Título</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="txt-titulo-evento" placeholder="Título" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-cancelar-edicao" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btn-editar-evento" class="btn btn-primary">Salvar</button>
+                <button type="button" id="btn-editar-evento" class="btn">Excluir</button>
+                <input type="hidden" id="hdf-id-evento-edicao" />
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
     <script src="~/scripts/jquery-1.11.3.min.js"></script>
+    <script src="~/scripts/jquery-ui-1.9.2.min.js"></script>
+    @Scripts.Render("~/bundles/bootstrap") @*como coloquei uma versão diferente do jquery acima, essa referência 
+                                               estava ficando depois da referência ao bootstrap.js e não funcionava*@
     <script src="~/scripts/moment.min.js"></script>
     <script src="~/scripts/fullcalendar.min.js"></script>
+    <script src="~/scripts/lang/pt-br.js"></script> @*ver capitalização*@
 
-    <script type="text/javascript">
+    <script>
+
+        function IniciarEventos() {
+            $('#external-events .fc-event').each(function () {
+                // store data so the calendar knows to render an event upon drop
+                $(this).data('event', {
+                    title: $.trim($(this).text()), // use the element's text as the event title
+                    stick: true // maintain when user navigates (see docs on the renderEvent method)
+                });
+                // make the event draggable using jQuery UI
+                $(this).draggable({
+                    zIndex: 999,
+                    revert: true,      // will cause the event to go back to its
+                    revertDuration: 0  //  original position after the drag
+                });
+            });
+        }
+
+        $("#btn-adicionar-evento").on("click", function () {
+            if ($("#txt-adicionar-evento").val() != "") {
+                $(".lista-de-eventos").append("<div class='fc-event ui-draggable ui-draggable-handle'>" + $("#txt-adicionar-evento").val() + "</div>");
+                $("#txt-adicionar-evento").val("");
+                IniciarEventos();//atualiza a lista de eventos para que o novo evento cadastro seja reconhecido pela função de drag
+            }
+        });
+
         // <![CDATA[
         $(document).ready(function () {
-            $("#calendar").fullCalendar({
-                theme: true,
-
-                //defaultView: "agendaDay",
-                //editable: false,
-                events: "/eventos/getevents/"
+            $('#calendar').fullCalendar({
+                theme: true, //precisa referenciar o css do tema tbm
+                editable: true,
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                lang: 'pt-br',
+                droppable: true,
+                drop: function (date) { //quando arrasta dos novos pro calendário - salvar
+                    $(this).remove();//remove o evento da lista
+                    var titulo = $(this).html();
+                    $.ajax({
+                        type: 'POST',
+                        url: "@Url.Action("AdicionarEvento")" + "?title=" + titulo + "&start=" + date.format(),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function () {
+                            $("#calendar").fullCalendar('removeEvents');
+                            $("#calendar").fullCalendar("refetchEvents"); //atualiza o calendário - evento novo fica com id do banco
+                        }
+                    });
+                },
+                eventDrop: function (event) {
+                    alert("id: " + event.id);
+                    atualizarEvento(event.id, event.start, event.end);
+                },
+                eventResize: function (event) {
+                    alert("id: " + event.id);
+                    atualizarEvento(event.id, event.start, event.end);
+                },
+                eventClick: function (calEvent) {
+                    $("#hdf-id-evento-edicao").val(calEvent.id);
+                    $("#txt-titulo-evento").val(calEvent.title);
+                    $('.modal-editar-evento').modal('show');
+                },
+                events: "@Url.Action("GetEventos")"
             });
         });
 
-        // ]]></script>
+        function atualizarEvento(eventId, eventStart, eventEnd) {
+            var visualizacaoAtual = $('#calendar').fullCalendar('getView').name;
+            var dataRow = {
+                'id': eventId,
+                'newEventStart': eventStart,
+                'newEventEnd': eventEnd,
+                'visualizacaoAtual': visualizacaoAtual
+            };
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("AtualizarEvento")",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(dataRow)
+            });
+        }
+
+        $("#btn-editar-evento").click(function () {
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("EditarEvento")" + "?id=" + $("#hdf-id-evento-edicao").val() + "&titulo=" + $("#txt-titulo-evento").val() + "&cor=" + $("#hdf-cor-evento-edicao").val(),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    if (data.Sucesso) {
+                        $("#calendar").fullCalendar('removeEvents');
+                        $("#calendar").fullCalendar("refetchEvents"); //atualiza o calendário - evento novo fica com id do banco
+                        $('.modal-editar-evento').modal('hide');
+                    }
+                }
+            });
+        });
+
+        // ]]>
+
+    </script>
 }
 
-@*    [implementação de um calendário semanal]*@
+@*[implementação de um calendário semanal]*@
 @*@Html.DayPilotCalendar("dpc", new DayPilotCalendarConfig
     {
         BackendUrl = Url.Action("Backend"),
@@ -47,9 +189,9 @@
         TimeRangeSelectedJavaScript = "dpc.timeRangeSelectedCallBack(start, end, null, { name: prompt('New Event Name:', 'New Event') });"
     })*@
 
-@*
-    [implementação calendário - pago]
-    @Html.DayPilotMenu("menu", new DayPilotMenuConfig
+
+@*  [implementação calendário - pago]*@
+@*@Html.DayPilotMenu("menu", new DayPilotMenuConfig
     {
         Items = new DayPilot.Web.Mvc.MenuItemCollection
         {

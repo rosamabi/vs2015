@@ -202,19 +202,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="scripts\DayPilot\daypilot-all.min.js" />
-    <Content Include="scripts\DayPilot\min\daypilot-calendar.min.js" />
-    <Content Include="scripts\DayPilot\min\daypilot-common.min.js" />
-    <Content Include="scripts\DayPilot\min\daypilot-datepicker.min.js" />
-    <Content Include="scripts\DayPilot\min\daypilot-modal.min.js" />
-    <Content Include="scripts\DayPilot\min\daypilot-month.min.js" />
-    <Content Include="scripts\DayPilot\min\daypilot-navigator.min.js" />
-    <Content Include="scripts\DayPilot\src\daypilot-calendar.src.js" />
-    <Content Include="scripts\DayPilot\src\daypilot-common.src.js" />
-    <Content Include="scripts\DayPilot\src\daypilot-datepicker.src.js" />
-    <Content Include="scripts\DayPilot\src\daypilot-modal.src.js" />
-    <Content Include="scripts\DayPilot\src\daypilot-month.src.js" />
-    <Content Include="scripts\DayPilot\src\daypilot-navigator.src.js" />
     <None Include="scripts\jquery-1.11.3.intellisense.js" />
     <Content Include="scripts\fullcalendar.js" />
     <Content Include="scripts\fullcalendar.min.js" />
