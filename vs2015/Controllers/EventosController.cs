@@ -21,30 +21,26 @@ namespace vs2015.Controllers
         // GET: Eventos
         public ActionResult Index()
         {
-            return View(db.Eventos.ToList());
-            //return View();
+            //return View(db.Eventos.ToList());
+            return View();
         }
 
         public ActionResult GetEventos(string start, string end)
         {
-            //ver esse filtro de data
-            //var fromDate = ConvertFromUnixTimestamp(start);
-            //var toDate = ConvertFromUnixTimestamp(end);
-
             List<Evento> eventos = db.Eventos.ToList();
             var novoeventos = from e in eventos
                               select new
                               {
                                   id = e.id,
                                   title = e.descricao,
-                                  start = e.horarioInicio.ToString("yyyy-MM-ddTHH:mm:ssZ").Replace("T00:00:00Z", string.Empty),
-                                  end = e.horarioFim != null ? e.horarioFim.Value.ToString("yyyy-MM-ddTHH:mm:ssZ") : string.Empty
+                                  start = e.horarioInicio,
+                                  end = e.horarioFim,
+                                  allDay = e.horarioFim == null ? true : false
                               };
 
             return Json(novoeventos.ToList(), JsonRequestBehavior.AllowGet);
         }
 
-        //[HttpPost]
         public void AdicionarEvento(string title, string start)
         {
             DateTime inicio = Convert.ToDateTime(start);
@@ -52,46 +48,21 @@ namespace vs2015.Controllers
             {
                 descricao = title,
                 horarioInicio = inicio,
-                horarioFim = inicio.AddHours(1)
+                horarioFim = null
             };
             db.Eventos.Add(evento);
             db.SaveChanges();
         }
 
-        //[HttpPost]
-        public void AtualizarEvento(string id, string newEventStart, string newEventEnd, string visualizacaoAtual)
+        public void AtualizarEvento(string id, string newEventStart, string newEventEnd)
         {
             DateTime? dataFinal = null;
+            DateTime dataInicial = Convert.ToDateTime(newEventStart);
 
-            //Se estiver na visualição de Mês não pode considerar o horário, somente a data pois nesta visualização o evento é 
-            //tratado como evento de dia inteiro, senão fizer isto a atualização mostrará o 
-            //evento como se ele tivesse no horário de 00:00 do dia
-            if (visualizacaoAtual.Equals("month"))
-            {
-                //Se a data contém T00:00:00.000Z tem que remover antes de converter para DateTime, 
-                //pois se não após converter volta um dia
-                if (newEventStart.Contains("T00:00:00.000Z"))
-                    newEventStart = newEventStart.Replace("T00:00:00.000Z", string.Empty);
-
-                if (!string.IsNullOrEmpty(newEventEnd))
-                {
-                    if (newEventEnd.Contains("T00:00:00.000Z"))
-                    {
-                        newEventEnd = newEventEnd.Replace("T00:00:00.000Z", string.Empty);
-                        dataFinal = Convert.ToDateTime(newEventEnd);
-                    }
-                }
-            }
-
-            //Tem que remover o .000Z, senão converte a hora de forma errada
-            newEventStart = newEventStart.Replace(".000Z", string.Empty);
             if (!string.IsNullOrEmpty(newEventEnd))
             {
-                newEventEnd = newEventEnd.Replace(".000Z", string.Empty);
                 dataFinal = Convert.ToDateTime(newEventEnd);
             }
-
-            DateTime dataInicial = Convert.ToDateTime(newEventStart);
 
             Evento evento = db.Eventos.Find(Convert.ToInt32(id));
             if (evento != null)
@@ -102,7 +73,6 @@ namespace vs2015.Controllers
             }
         }
 
-        //[HttpPost]
         public ActionResult EditarEvento(string id, string titulo, string cor)
         {
             Evento evento = db.Eventos.Find(Convert.ToInt32(id));
@@ -116,10 +86,17 @@ namespace vs2015.Controllers
                 return Json(new { Sucesso = false }, JsonRequestBehavior.AllowGet);
         }
 
-        private static DateTime ConvertFromUnixTimestamp(double timestamp)
+        public ActionResult ExcluirEvento(string id)
         {
-            var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return origin.AddSeconds(timestamp);
+            Evento evento = db.Eventos.Find(Convert.ToInt32(id));
+            if (evento != null)
+            {
+                db.Eventos.Remove(evento);
+                db.SaveChanges();
+                return Json(new { Sucesso = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+                return Json(new { Sucesso = false }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Eventos/Details/5

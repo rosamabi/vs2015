@@ -8,10 +8,11 @@ namespace vs2015
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jqueryold").Include(
-                        "~/Scripts/jquery-{version}.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/jquery-ui-1.9.2.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jqueryCrop").Include(
                         "~/Scripts/jquery-1.9.1.min.js",
                         "~/Scripts/jquery-ui-1.9.2.min.js"));
 
@@ -34,6 +35,11 @@ namespace vs2015
                         "~/Scripts/jquery.fileupload.js",
                         "~/Scripts/jquery.fileupload-ui.js",
                         "~/Scripts/jquery.iframe-transport.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/fullcalendar").Include(
+                        "~/scripts/moment.min.js",
+                        "~/scripts/fullcalendar.min.js",
+                        "~/scripts/lang/pt-br.js"));
         }
     }
 }
