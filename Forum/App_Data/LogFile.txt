@@ -10,3 +10,30 @@
 22/07/2016 16:10:35 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.PoweredBy' for language Portuguese (Brazil).
 22/07/2016 16:10:35 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'SlidePanel.CloseConfirmation' for language Portuguese (Brazil).
 22/07/2016 17:02:02 | MVCForum.Website.dll | Application_Start | MVCForum.Website.MvcApplication | 0 | START APP
+26/07/2016 14:09:47 | MVCForum.Website.dll | Application_Start | MVCForum.Website.MvcApplication | 0 | START APP
+26/07/2016 14:10:40 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Home.Rss' for language Portuguese (Brazil).
+26/07/2016 14:10:48 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Side.Search.SearchFor' for language Portuguese (Brazil).
+26/07/2016 14:10:48 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Side.Search' for language Portuguese (Brazil).
+26/07/2016 14:10:48 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Side.Search.Go' for language Portuguese (Brazil).
+26/07/2016 14:10:51 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Tags.PopularTags' for language Portuguese (Brazil).
+26/07/2016 14:10:56 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Topic.HotTopics' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Register' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Logon' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'SubNav.Latest' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Leaderboard' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Activity' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Badges' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Site.MvcForum' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Register' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Logon' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'SubNav.Latest' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Leaderboard' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Activity' for language Portuguese (Brazil).
+26/07/2016 14:10:57 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.Nav.Badges' for language Portuguese (Brazil).
+26/07/2016 14:11:08 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Notifications.NoActiveMembers' for language Portuguese (Brazil).
+26/07/2016 14:11:08 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'Layout.PoweredBy' for language Portuguese (Brazil).
+26/07/2016 14:11:08 | MVCForum.Services.dll | GetResourceString | MVCForum.Services.LocalizationService | 0 | No value is set for resource key 'SlidePanel.CloseConfirmation' for language Portuguese (Brazil).
+26/07/2016 17:50:56 | MVCForum.Website.dll | Application_Start | MVCForum.Website.MvcApplication | 0 | START APP
+26/07/2016 17:52:18 | MVCForum.Services.dll | ProcessMail | MVCForum.Services.EmailService | 0 | An error occurred while executing the command definition. See the inner exception for details. INNER EXCEPTION: Ocorreu um erro no nível de transporte durante o recebimento de resultados do servidor. (provider: TCP Provider, error: 0 - O tempo limite do semáforo expirou.) INNER EXCEPTION: O tempo limite do semáforo expirou
+26/07/2016 18:20:40 | MVCForum.Website.dll | Application_Start | MVCForum.Website.MvcApplication | 0 | START APP
+26/07/2016 18:21:06 | MVCForum.Website.dll | Application_Error | MVCForum.Website.MvcApplication | 0 | Caminho '/Views/Shared/EditorTemplates/colourpicker.cshtml' não foi encontrado.
